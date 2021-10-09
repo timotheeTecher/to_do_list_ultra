@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import './App.css';
+import classes from './App.module.css';
 
 import Task from '../../Components/Task/Task'
 
 function App() {
   //State
-  const [tasks, setTasks] = useState([
-    {
-      name: "Aller chercher les courses",
-      checked: false
-    },
-    {
-      name: "Faire la vaisselle",
-      checked: false
-    },
-    {
-      name: "Laver la voiture",
-      checked: false
-    },
-    {
-      name: "Apprendre React",
-      checked: false
-    }
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [input, setInput] = useState('');
 
   //Méthodes
+  const submittedTaskHandler = event => {
+    event.preventDefault();
+    const newTask = {
+      name: input,
+      checked: false
+    }
+    const newTasks = [...tasks];
+    newTasks.unshift(newTask);
+    setTasks(newTasks);
+    setInput('');
+  }
+
+  const changedFormHandler = event => {
+    setInput(event.target.value);
+  }
+
   const deleteTask = index => {
     const newTasks = [...tasks];
     newTasks.splice(index, 1);
@@ -53,14 +53,14 @@ function App() {
 
   //Rendu JSX
   return (
-    <div className="App">
+    <div className={ classes.App }>
       <header>
         <span>TO-DO</span>
       </header>
 
-      <div className="add">
-        <form>
-          <input type="text" placeholder="Que souhaitez-vous ajouter ?" />
+      <div className={ classes.add }>
+        <form onSubmit={ e => submittedTaskHandler(e) }>
+          <input value={ input } onChange={ e => changedFormHandler(e) } type="text" placeholder="Que souhaitez-vous ajouter ?" />
           <button type="submit">
             Ajouter
           </button>
